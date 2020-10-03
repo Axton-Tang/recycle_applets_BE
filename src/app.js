@@ -9,6 +9,12 @@ const logger = require('koa-logger')
 const index = require('./routes/index')
 const users = require('./routes/users')
 
+const { REDIS_CONF } = require('./conf/db')
+const session = require('koa-generic-session')
+const redisStore = require('koa-redis')
+
+const { SESSION_SECRET_KEY } = require('./conf/secreKeys')
+
 // error handler
 onerror(app)
 
@@ -31,6 +37,20 @@ app.use(async (ctx, next) => {
   const ms = new Date() - start
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
 })
+
+app.keys = [SESSION_SECRET_KEY]
+app.use(session({
+  key: 'mini.sid',
+  prefix: 'mini:sess',
+  cookie: {
+    path: '/',
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000
+  },
+  store: redisStore({
+    all: `${REDIS_CONF.host}:${REDIS_CONF.port}`
+  })
+}))
 
 // routes
 app.use(index.routes(), index.allowedMethods())
