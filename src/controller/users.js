@@ -35,6 +35,7 @@ async function login(ctx) {
 
   if (session_key && openid) {
 
+    let uId = ''
     const userInfo = await getUserInfo(openid)    
     if (userInfo == null) {     //获取用户信息后，如果发现为空，则进行注册
       const registerResult = await createUser({
@@ -43,10 +44,13 @@ async function login(ctx) {
         gender, 
         city
       })
+      uId = registerResult.id
       if (!registerResult) {
         return new ErrorModel(registerFailInfo)
       }
       
+    } else {
+      uId = userInfo.id
     }
 
     // 生成_3rd_session
@@ -54,7 +58,8 @@ async function login(ctx) {
     // 存入Redis并设置过期时间
     const result = await set(_3rd_session, JSON.stringify({
       session_key,
-      openid
+      openid,
+      uId
     }))
     if (result) {
       return new SuccessModel(_3rd_session)

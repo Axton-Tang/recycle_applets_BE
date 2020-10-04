@@ -4,7 +4,13 @@
  */
 
 const User = require('./User')
+const Delivery = require('./Delivery')
+
+User.hasMany(Delivery, {
+  foreignKey: 'uId'
+})
 
 module.exports = {
-  User
+  User,
+  Delivery
 }

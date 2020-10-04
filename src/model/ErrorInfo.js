@@ -14,4 +14,12 @@ module.exports = {
     errno: 10002,
     message: '注册失败，请重试'
   },
+  createDeliveryFailInfo: {
+    errno: 10003,
+    message: '创建投递记录失败'
+  },
+  getDeliveryFailInfo: {
+    errno: 10004,
+    message: '查找投递记录失败'
+  }
 }
