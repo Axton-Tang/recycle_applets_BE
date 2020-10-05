@@ -18,6 +18,17 @@ async function loginCheck (ctx, next) {
   }
 }
 
+async function loginCheckGet(ctx, next) {
+  // 查询数据库，判断_3rd_session是否存在且有效
+  const res = await get(ctx.request.query._3rd_session)
+  if (res) {
+    await next()
+  } else {
+    ctx.body = new ErrorModel(loginCheckFailInfo)
+  }
+}
+
 module.exports = {
-  loginCheck
+  loginCheck,
+  loginCheckGet
 }

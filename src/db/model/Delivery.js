@@ -14,7 +14,6 @@ const User = seq.define('delivery', {
   uId: {
     type: INTEGER,
     allowNull: false,
-    unique: true,
     comment: '用户在表中的ID'
   },
   unusual: {

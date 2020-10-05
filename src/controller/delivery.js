@@ -22,9 +22,9 @@ async function recordDelivery(uId, unusual, comment) {
   
 }
 
-async function queryDelivery(uId) {
+async function queryDelivery(uId, pageIndex) {
   try {
-    const result = await getDelivery(uId)
+    const result = await getDelivery(uId, pageIndex)
     return new SuccessModel(result)
   } catch(e) {
     console.error(e)

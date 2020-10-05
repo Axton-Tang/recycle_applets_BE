@@ -22,15 +22,24 @@ async function addDelivery(uId, unusual, comment) {
   return result.dataValues
 }
 
-async function getDelivery(uId) {
+async function getDelivery(uId, pageIndex) {
   const result = await Delivery.findAndCountAll({
+    limit: 5,
+    offset: pageIndex * 5,
+    order: [
+      ['id', 'desc']
+    ],
     where: {
       uId
     }
-
   })
-  // return result.dataValues
-  console.log(result.dataValues)
+
+  let deliveryList = result.rows.map(row => row.dataValues)
+
+  return {
+    count: result.count,
+    deliveryList
+  }
 }
 
 module.exports = {
